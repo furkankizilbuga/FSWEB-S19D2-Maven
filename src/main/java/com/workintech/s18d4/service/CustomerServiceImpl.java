@@ -20,30 +20,30 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> getAllCustomers() {
+    public List<Customer> findAll() {
         return customerRepository.findAll();
     }
 
     @Override
-    public Customer getById(long id) {
+    public Customer find(long id) {
         return customerRepository.findById(id).orElseThrow(()
                 -> new CustomerException("A customer with the given id could not be found!", HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public Customer postCustomer(Customer customer) {
+    public Customer save(Customer customer) {
         return customerRepository.save(customer);
     }
 
     @Override
     public Customer updateCustomer(long id) {
-        Customer customer = getById(id);
-        return postCustomer(customer);
+        Customer customer = find(id);
+        return save(customer);
     }
 
     @Override
-    public Customer deleteCustomer(long id) {
-        Customer customer = getById(id);
+    public Customer delete(long id) {
+        Customer customer = find(id);
         customerRepository.delete(customer);
         return customer;
     }

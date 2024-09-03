@@ -20,17 +20,17 @@ public class AddressController {
 
     @GetMapping
     public List<Address> getAll() {
-        return addressService.getAll();
+        return addressService.findAll();
     }
 
     @GetMapping("/{id}")
     public Address getById(@PathVariable long id) {
-        return addressService.getById(id);
+        return addressService.find(id);
     }
 
     @PostMapping
     public Address postAddress(@RequestBody Address address) {
-        return addressService.postAddress(address);
+        return addressService.save(address);
     }
 
     @PutMapping("/{id}")
@@ -40,7 +40,7 @@ public class AddressController {
 
     @DeleteMapping("/{id}")
     public Address deleteAddress(@PathVariable long id) {
-        return addressService.deleteAddress(id);
+        return addressService.delete(id);
     }
 
 }

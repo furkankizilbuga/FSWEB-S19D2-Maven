@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface AccountService {
 
-    List<Account> getAll();
-    Account getById(long id);
-    Account postAccount(long customerId, Account account);
-    //Account updateAccount(long id);
-    Account deleteAccount(long id);
+    List<Account> findAll();
+    Account find(long id);
+    Account save(Account account);
+    Account updateAccount(long id, Account account);
+    Account delete(long id);
 
 }

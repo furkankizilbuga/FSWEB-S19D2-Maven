@@ -25,36 +25,55 @@ public class AccountServiceImpl implements AccountService {
         this.customerRepository = customerRepository;
     }
 
+    @Autowired
+    public AccountServiceImpl(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
+
 
     @Override
-    public List<Account> getAll() {
+    public List<Account> findAll() {
         return accountRepository.findAll();
     }
 
     @Override
-    public Account getById(long id) {
+    public Account find(long id) {
         return accountRepository.findById(id).orElseThrow(()
                 -> new AccountException("An account with the given id could not be found!", HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public Account postAccount(long customerId, Account account) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(()
-                -> new CustomerException("A customer with given id could not be found!", HttpStatus.NOT_FOUND));
-        account.setCustomer(customer);
+    public Account save(Account account) {
         return accountRepository.save(account);
     }
 
-    /*@Override
-    public Account updateAccount(long customerId) {
+    @Override
+    public Account updateAccount(long customerId, Account newAccount) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(()
                 -> new CustomerException("A customer with given id could not be found!", HttpStatus.NOT_FOUND));
 
-    }*/
+        Account tobeUpdated = null;
+
+        for(Account account : customer.getAccounts()) {
+            if(account.getId() == newAccount.getId()) {
+                tobeUpdated = account;
+            }
+        }
+
+        if(tobeUpdated == null) {
+            throw new AccountException("Account could not be found!", HttpStatus.NOT_FOUND);
+        }
+
+        int indexTobeUpdated = customer.getAccounts().indexOf(tobeUpdated);
+        customer.getAccounts().set(indexTobeUpdated, newAccount);
+        newAccount.setCustomer(customer);
+        accountRepository.save(newAccount);
+        return newAccount;
+    }
 
     @Override
-    public Account deleteAccount(long id) {
-        Account account = getById(id);
+    public Account delete(long id) {
+        Account account = find(id);
         accountRepository.delete(account);
         return account;
     }

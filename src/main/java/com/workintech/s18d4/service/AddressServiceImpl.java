@@ -20,30 +20,30 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> getAll() {
+    public List<Address> findAll() {
         return addressRepository.findAll();
     }
 
     @Override
-    public Address getById(long id) {
+    public Address find(long id) {
         return addressRepository.findById(id).orElseThrow(()
                 -> new AddressException("An address with given id could not be found!", HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public Address postAddress(Address address) {
+    public Address save(Address address) {
         return addressRepository.save(address);
     }
 
     @Override
     public Address updateAddress(long id) {
-        Address address = getById(id);
+        Address address = find(id);
         return address;
     }
 
     @Override
-    public Address deleteAddress(long id) {
-        Address address = getById(id);
+    public Address delete(long id) {
+        Address address = find(id);
         addressRepository.delete(address);
         return address;
     }

@@ -1,5 +1,6 @@
 package com.workintech.s18d4.controller;
 
+import com.workintech.s18d4.dto.CustomerResponse;
 import com.workintech.s18d4.entity.Customer;
 import com.workintech.s18d4.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +21,18 @@ public class CustomerController {
 
     @GetMapping
     public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+        return customerService.findAll();
     }
 
     @GetMapping("/{id}")
     public Customer getById(@PathVariable long id) {
-        return customerService.getById(id);
+        return customerService.find(id);
     }
 
     @PostMapping
-    public Customer postCustomer(@RequestBody Customer customer) {
-        return customerService.postCustomer(customer);
+    public CustomerResponse postCustomer(@RequestBody Customer customer) {
+        customerService.save(customer);
+        return new CustomerResponse(customer.getId(), customer.getEmail(), customer.getSalary());
     }
 
     @PutMapping("/{id}")
@@ -40,6 +42,6 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     public Customer deleteCustomer(@PathVariable long id) {
-        return customerService.deleteCustomer(id);
+        return customerService.delete(id);
     }
 }

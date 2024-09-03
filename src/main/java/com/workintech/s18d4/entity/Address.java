@@ -22,4 +22,7 @@ public class Address {
     private String country;
     private String description;
 
+    @OneToOne(mappedBy = "address", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private Customer customer;
+
 }
