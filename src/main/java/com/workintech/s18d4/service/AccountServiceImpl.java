@@ -17,13 +17,6 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
 
     private AccountRepository accountRepository;
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository, CustomerRepository customerRepository) {
-        this.accountRepository = accountRepository;
-        this.customerRepository = customerRepository;
-    }
 
     @Autowired
     public AccountServiceImpl(AccountRepository accountRepository) {
@@ -38,8 +31,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account find(long id) {
-        return accountRepository.findById(id).orElseThrow(()
-                -> new AccountException("An account with the given id could not be found!", HttpStatus.NOT_FOUND));
+        return accountRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -47,10 +39,8 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.save(account);
     }
 
-    @Override
-    public Account updateAccount(long customerId, Account newAccount) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(()
-                -> new CustomerException("A customer with given id could not be found!", HttpStatus.NOT_FOUND));
+    /*@Override
+    public Account updateAccount(Customer customer) {
 
         Account tobeUpdated = null;
 
@@ -69,7 +59,7 @@ public class AccountServiceImpl implements AccountService {
         newAccount.setCustomer(customer);
         accountRepository.save(newAccount);
         return newAccount;
-    }
+    }*/
 
     @Override
     public Account delete(long id) {

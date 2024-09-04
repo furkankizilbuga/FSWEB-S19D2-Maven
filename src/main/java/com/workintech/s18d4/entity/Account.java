@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name="account", schema = "S19D2")
+@Table(name="account", schema = "fsweb")
 public class Account {
 
     @Id

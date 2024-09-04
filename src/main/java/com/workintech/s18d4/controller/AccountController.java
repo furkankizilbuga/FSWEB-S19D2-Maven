@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/account")
 public class AccountController {
 
     private AccountService accountService;
@@ -47,19 +47,36 @@ public class AccountController {
         } else {
             throw new AccountException("asd", HttpStatus.BAD_REQUEST);
         }
-        return new AccountResponse(account.getAccountName());
+        return new AccountResponse(account.getId(),account.getAccountName(), account.getMoneyAmount());
     }
 
     @PutMapping("/{customerId}")
     public AccountResponse putAccount(@PathVariable long customerId, @RequestBody Account account) {
-        accountService.updateAccount(customerId, account);
-        return new AccountResponse(account.getAccountName());
+        Customer customer = customerService.find(customerId);
+        Account tobeUpdated = null;
+
+        for(Account account1 : customer.getAccounts()) {
+            if(account.getId() == account1.getId()) {
+                tobeUpdated = account1;
+            }
+        }
+
+        if(tobeUpdated == null) {
+            throw new AccountException("Account could not be found!", HttpStatus.NOT_FOUND);
+        }
+
+        int indexTobeUpdated = customer.getAccounts().indexOf(tobeUpdated);
+        customer.getAccounts().set(indexTobeUpdated, account);
+        account.setCustomer(customer);
+        accountService.save(account);
+        return new AccountResponse(account.getId(), account.getAccountName(), account.getMoneyAmount());
     }
 
     @DeleteMapping("/{id}")
-    public AccountResponse deleteAccount(@PathVariable long id) {
-        Account account = accountService.delete(id);
-        return new AccountResponse(account.getAccountName());
+    public AccountResponse deleteAccount(@PathVariable Long id) {
+        Account account = accountService.find(id);
+        accountService.delete(id);
+        return new AccountResponse(account.getId(), account.getAccountName(), account.getMoneyAmount());
     }
 
 }

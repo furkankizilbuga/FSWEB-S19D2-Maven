@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name="address", schema = "S19D2")
+@Table(name="address", schema = "fsweb")
 public class Address {
 
     @Id

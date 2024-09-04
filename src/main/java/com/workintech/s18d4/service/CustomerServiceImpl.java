@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -26,8 +27,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer find(long id) {
-        return customerRepository.findById(id).orElseThrow(()
-                -> new CustomerException("A customer with the given id could not be found!", HttpStatus.NOT_FOUND));
+        Optional<Customer> customer = customerRepository.findById(id);
+        return customer.orElse(null);
     }
 
     @Override
